@@ -17,8 +17,19 @@ export async function sendMessage(
       dangerouslyAllowBrowser: true,
     });
 
+    // Custom instruction to guide AI behavior
+    const customInstruction = {
+      content: `
+        Be a compassionate listener and emotional support. Acknowledge my feelings, ask thoughtful questions to help me reflect, and offer occasional advice only when helpful. Keep the tone casual and responses short like a real conversation. Check in on how I’m feeling every now and then, and offer breathing exercises if the conversation dies down or I have nothing to say.
+      `,
+      role: "system", // "system" role ensures this is treated as context
+    };
+
+    // Add the custom instruction to the beginning of the messages array
+    const fullMessages = [customInstruction, ...messages];
+
     const response = await groq.chat.completions.create({
-      messages: messages,
+      messages: fullMessages,
       model: model || "llama-3.3-70b-versatile",
     });
 
